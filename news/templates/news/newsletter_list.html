@@ -1,0 +1,42 @@
+{% extends "news/base.html" %}
+
+{% block content %}
+
+<h1>Newsletters</h1>
+
+{% if newsletters %}
+    <div class="row">
+        {% for newsletter in newsletters %}
+            <div class="col-md-6 mb-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h2 class="card-title">
+                            {{ newsletter.title }}
+                        </h2>
+
+                        <p class="card-text">
+                            {{ newsletter.description }}
+                        </p>
+
+                        <p class="text-muted">
+                            Created by {{ newsletter.author.username }}
+                        </p>
+
+                        <p class="text-muted">
+                            {{ newsletter.created_at|date:"F j, Y" }}
+                        </p>
+
+                        <a href="{% url 'newsletter_detail' newsletter.pk %}"
+                           class="btn btn-primary">
+                            View Newsletter
+                        </a>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% else %}
+    <p>No newsletters are available.</p>
+{% endif %}
+
+{% endblock %}
