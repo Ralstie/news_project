@@ -1,0 +1,64 @@
+{% extends "news/base.html" %}
+
+{% block title %}Editor Dashboard - NewsHub{% endblock %}
+
+{% block content %}
+<h1>Editor Dashboard</h1>
+
+<h2 class="mt-4">Articles</h2>
+{% for article in articles %}
+<div class="card mb-3">
+    <div class="card-body">
+        <h3 class="h5">{{ article.title }}</h3>
+        <p>
+            By {{ article.author.username }}
+            {% if article.publisher %} | {{ article.publisher.name }}{% endif %}
+        </p>
+        <p>Status: {% if article.approved %}Approved{% else %}Pending{% endif %}</p>
+
+        <a class="btn btn-sm btn-outline-primary"
+           href="{% url 'editor_article_detail' article.id %}">View</a>
+        <a class="btn btn-sm btn-primary"
+           href="{% url 'editor_article_edit' article.id %}">Edit</a>
+
+        {% if not article.approved %}
+        <form method="post" action="{% url 'approve_article' article.id %}" class="d-inline">
+            {% csrf_token %}
+            <button class="btn btn-sm btn-success" type="submit">Approve</button>
+        </form>
+        {% endif %}
+
+        <form method="post"
+              action="{% url 'editor_article_delete' article.id %}"
+              class="d-inline">
+            {% csrf_token %}
+            <button class="btn btn-sm btn-danger" type="submit">Delete</button>
+        </form>
+    </div>
+</div>
+{% empty %}
+<p>No articles are available.</p>
+{% endfor %}
+
+<h2 class="mt-5">Newsletters</h2>
+{% for newsletter in newsletters %}
+<div class="card mb-3">
+    <div class="card-body">
+        <h3 class="h5">{{ newsletter.title }}</h3>
+        <p>By {{ newsletter.author.username }}</p>
+        <a class="btn btn-sm btn-outline-primary"
+           href="{% url 'newsletter_detail' newsletter.id %}">View</a>
+        <a class="btn btn-sm btn-primary"
+           href="{% url 'editor_newsletter_edit' newsletter.id %}">Edit</a>
+        <form method="post"
+              action="{% url 'editor_newsletter_delete' newsletter.id %}"
+              class="d-inline">
+            {% csrf_token %}
+            <button class="btn btn-sm btn-danger" type="submit">Delete</button>
+        </form>
+    </div>
+</div>
+{% empty %}
+<p>No newsletters are available.</p>
+{% endfor %}
+{% endblock %}

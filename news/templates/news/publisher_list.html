@@ -1,0 +1,31 @@
+{% extends "news/base.html" %}
+
+{% block title %}Publishers - NewsHub{% endblock %}
+
+{% block content %}
+<h1 class="mb-4">Publishers</h1>
+
+{% if user.role == "PUBLISHER" %}
+    <a class="btn btn-primary mb-4" href="{% url 'publisher_create' %}">
+        Create Publisher
+    </a>
+{% endif %}
+
+<div class="row">
+    {% for publisher in publishers %}
+        <div class="col-md-6 mb-4">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h2 class="h4">{{ publisher.name }}</h2>
+                    <p>{{ publisher.description|truncatewords:30 }}</p>
+                    <a href="{% url 'publisher_detail' publisher.id %}">
+                        View publisher
+                    </a>
+                </div>
+            </div>
+        </div>
+    {% empty %}
+        <p>No publishers have been created yet.</p>
+    {% endfor %}
+</div>
+{% endblock %}
