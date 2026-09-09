@@ -1,3 +1,5 @@
+"""Permission classes for the NewsHub application."""
+
 from rest_framework.permissions import BasePermission
 
 from .models import User
@@ -7,6 +9,7 @@ class IsJournalistOrReadOnly(BasePermission):
     """Allow anyone to read and authenticated journalists to write."""
 
     def has_permission(self, request, view):
+        """Check whether the user can access the requested operation."""
         if request.method in ("GET", "HEAD", "OPTIONS"):
             return True
 

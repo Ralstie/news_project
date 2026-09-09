@@ -1,3 +1,8 @@
+"""Signal handlers for the NewsHub application.
+
+This module assigns users to Django groups based on their roles.
+"""
+
 from django.contrib.auth.models import Group
 from django.db.models.signals import post_save
 from django.dispatch import receiver

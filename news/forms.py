@@ -1,3 +1,9 @@
+"""Forms for the NewsHub application.
+
+This module defines forms for user registration, articles,
+newsletters, and publisher management.
+"""
+
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 
