@@ -1,0 +1,240 @@
+{% extends "news/base.html" %}
+
+{% block title %}
+    Publisher Dashboard - NewsHub
+{% endblock %}
+
+{% block content %}
+
+<div class="container">
+    
+    <div class="mb-4">
+        <h1>Publisher Dashboard</h1>
+
+        <p class="text-muted">
+            Welcome, {{ user.username }}.
+        </p>
+    </div>
+    
+    <div class="card shadow-sm mb-4">
+
+        <div class="card-header">
+            <h2 class="h5 mb-0">
+                My Publishers
+            </h2>
+        </div>
+
+        <div class="card-body">
+
+            {% if publishers %}
+
+                <div class="list-group">
+
+                    {% for publisher in publishers %}
+
+                        <div class="list-group-item">
+
+                            <h3 class="h6 mb-1">
+                                {{ publisher.name }}
+                            </h3>
+
+                            {% if publisher.description %}
+                                <p class="text-muted mb-0">
+                                    {{ publisher.description }}
+                                </p>
+                            {% endif %}
+
+                        </div>
+
+                    {% endfor %}
+
+                </div>
+
+            {% else %}
+
+                <p class="text-muted mb-0">
+                    You are not assigned to any publishers yet.
+                </p>
+
+            {% endif %}
+
+        </div>
+
+    </div>
+    
+    <div class="card shadow-sm mb-4">
+
+        <div class="card-header">
+            <h2 class="h5 mb-0">
+                Publisher Articles
+            </h2>
+        </div>
+
+        <div class="card-body">
+
+            {% if articles %}
+
+                <div class="table-responsive">
+
+                    <table class="table table-hover align-middle">
+
+                        <thead>
+                            <tr>
+                                <th>Title</th>
+                                <th>Author</th>
+                                <th>Publisher</th>
+                                <th>Status</th>
+                                <th>Created</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+
+                            {% for article in articles %}
+
+                                <tr>
+                                    
+                                    <td>
+
+                                        <a
+                                            href="{% url 'article_detail' article.id %}"
+                                            class="text-decoration-none"
+                                        >
+                                            <strong>
+                                                {{ article.title }}
+                                            </strong>
+                                        </a>
+
+                                    </td>
+                                    
+                                    <td>
+
+                                        {% if article.author %}
+                                            {{ article.author.username }}
+                                        {% else %}
+                                            Unknown
+                                        {% endif %}
+
+                                    </td>
+
+                                    
+                                    <td>
+
+                                        {% if article.publisher %}
+                                            {{ article.publisher.name }}
+                                        {% else %}
+                                            No publisher
+                                        {% endif %}
+
+                                    </td>
+                                    
+                                    <td>
+
+                                        {% if article.approved %}
+
+                                            <span class="badge bg-success">
+                                                Approved
+                                            </span>
+
+                                        {% else %}
+
+                                            <span class="badge bg-warning text-dark">
+                                                Pending Approval
+                                            </span>
+
+                                        {% endif %}
+
+                                    </td>
+
+                                    
+                                    <td>
+                                        {{ article.created_at|date:"F j, Y" }}
+                                    </td>
+
+                                </tr>
+
+                            {% endfor %}
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            {% else %}
+
+                <p class="text-muted mb-0">
+                    There are no articles for your publishers yet.
+                </p>
+
+            {% endif %}
+
+        </div>
+
+    </div>
+    
+    <div class="card shadow-sm">
+
+        <div class="card-header">
+            <h2 class="h5 mb-0">
+                Publisher Newsletters
+            </h2>
+        </div>
+
+        <div class="card-body">
+
+            {% if newsletters %}
+
+                <div class="list-group">
+
+                    {% for newsletter in newsletters %}
+
+                        <div class="list-group-item">
+
+                            <h3 class="h6 mb-1">
+
+                                <a
+                                    href="{% url 'newsletter_detail' newsletter.id %}"
+                                    class="text-decoration-none"
+                                >
+                                    {{ newsletter.title }}
+                                </a>
+
+                            </h3>
+
+                            {% if newsletter.description %}
+
+                                <p class="mb-1">
+                                    {{ newsletter.description }}
+                                </p>
+
+                            {% endif %}
+
+                            <small class="text-muted">
+
+                                Created
+                                {{ newsletter.created_at|date:"F j, Y" }}
+
+                            </small>
+
+                        </div>
+
+                    {% endfor %}
+
+                </div>
+
+            {% else %}
+
+                <p class="text-muted mb-0">
+                    There are no newsletters for your publishers yet.
+                </p>
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}
