@@ -1,0 +1,39 @@
+services:
+  db:
+    image: mariadb:12.3
+    container_name: newshub-db
+    environment:
+      MARIADB_DATABASE: news_project
+      MARIADB_USER: newshub
+      MARIADB_PASSWORD: newshub_password
+      MARIADB_ROOT_PASSWORD: root_password
+    volumes:
+      - mariadb_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+
+  web:
+    build: .
+    container_name: newshub-web
+    command: python manage.py runserver 0.0.0.0:8000
+    ports:
+      - "8000:8000"
+    environment:
+      DJANGO_SECRET_KEY: change-this-in-production
+      DJANGO_DEBUG: "True"
+      DJANGO_ALLOWED_HOSTS: 127.0.0.1,localhost
+      DB_NAME: news_project
+      DB_USER: newshub
+      DB_PASSWORD: newshub_password
+      DB_HOST: db
+      DB_PORT: "3306"
+    depends_on:
+      db:
+        condition: service_healthy
+
+volumes:
+  mariadb_data:

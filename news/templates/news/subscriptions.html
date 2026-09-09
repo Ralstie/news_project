@@ -1,0 +1,19 @@
+{% extends "news/base.html" %}
+
+{% block content %}
+<h1>My Subscriptions</h1>
+
+{% if subscriptions %}
+    <h2>Subscribed Journalists</h2>
+
+    <ul>
+        {% for journalist in subscriptions %}
+            <li>
+                {{ journalist.username }}
+            </li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>You are not subscribed to any journalists yet.</p>
+{% endif %}
+{% endblock %}
