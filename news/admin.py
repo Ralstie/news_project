@@ -1,4 +1,4 @@
-# Register your models here.
+"""Admin configuration for the NewsHub application."""
 
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
@@ -7,7 +7,8 @@ from .models import Article, Newsletter, Publisher, User
 
 
 @admin.register(User)
-class CustomUserAdmin(UserAdmin):    
+class CustomUserAdmin(UserAdmin):
+    """Configure the Django admin interface for NewsHub users."""
 
     fieldsets = UserAdmin.fieldsets + (
         ("News Application", {"fields": ("role",)}),
@@ -33,7 +34,8 @@ class CustomUserAdmin(UserAdmin):
 
 
 @admin.register(Publisher)
-class PublisherAdmin(admin.ModelAdmin):    
+class PublisherAdmin(admin.ModelAdmin):
+    """Configure the Django admin interface for publishers."""
 
     list_display = (
         "name",
@@ -53,7 +55,8 @@ class PublisherAdmin(admin.ModelAdmin):
 
 
 @admin.register(Article)
-class ArticleAdmin(admin.ModelAdmin):    
+class ArticleAdmin(admin.ModelAdmin):
+    """Configure the Django admin interface for articles."""
 
     list_display = (
         "title",
@@ -77,7 +80,8 @@ class ArticleAdmin(admin.ModelAdmin):
 
 
 @admin.register(Newsletter)
-class NewsletterAdmin(admin.ModelAdmin):    
+class NewsletterAdmin(admin.ModelAdmin):
+    """Configure the Django admin interface for newsletters."""
 
     list_display = (
         "title",

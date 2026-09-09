@@ -1,3 +1,9 @@
+"""Database models for the NewsHub application.
+
+This module defines users, publishers, articles, and newsletters,
+including their relationships and validation rules.
+"""
+
 from django.contrib.auth.models import AbstractUser
 from django.core.exceptions import ValidationError
 from django.db import models
@@ -17,11 +23,13 @@ class User(AbstractUser):
         choices=Role.choices,
         default=Role.READER,
     )
+
     subscribed_publishers = models.ManyToManyField(
         "Publisher",
         related_name="subscribers",
         blank=True,
     )
+
     subscribed_journalists = models.ManyToManyField(
         "self",
         related_name="journalist_subscribers",
@@ -37,24 +45,28 @@ class Publisher(models.Model):
     name = models.CharField(max_length=200)
     description = models.TextField(blank=True)
     website = models.URLField(blank=True)
+
     publishers = models.ManyToManyField(
         "User",
         related_name="publisher_accounts",
         blank=True,
         limit_choices_to={"role": User.Role.PUBLISHER},
     )
+
     editors = models.ManyToManyField(
         "User",
         related_name="editor_publishers",
         blank=True,
         limit_choices_to={"role": User.Role.EDITOR},
     )
+
     journalists = models.ManyToManyField(
         "User",
         related_name="journalist_publishers",
         blank=True,
         limit_choices_to={"role": User.Role.JOURNALIST},
     )
+
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
@@ -66,12 +78,14 @@ class Article(models.Model):
 
     title = models.CharField(max_length=255)
     content = models.TextField()
+
     author = models.ForeignKey(
         "User",
         on_delete=models.CASCADE,
         related_name="articles",
         limit_choices_to={"role": User.Role.JOURNALIST},
     )
+
     publisher = models.ForeignKey(
         Publisher,
         on_delete=models.SET_NULL,
@@ -79,6 +93,7 @@ class Article(models.Model):
         blank=True,
         related_name="articles",
     )
+
     approved = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -93,6 +108,7 @@ class Article(models.Model):
 
     def clean(self):
         """Ensure articles are written by assigned journalists."""
+
         if self.author.role != User.Role.JOURNALIST:
             raise ValidationError("Only journalists can be article authors.")
 
@@ -112,17 +128,20 @@ class Newsletter(models.Model):
 
     title = models.CharField(max_length=255)
     description = models.TextField()
+
     author = models.ForeignKey(
         "User",
         on_delete=models.CASCADE,
         related_name="newsletters",
         limit_choices_to={"role": User.Role.JOURNALIST},
     )
+
     articles = models.ManyToManyField(
         Article,
         related_name="newsletters",
         blank=True,
     )
+
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -131,6 +150,7 @@ class Newsletter(models.Model):
 
     def clean(self):
         """Ensure newsletters are created by journalists."""
+
         if self.author.role != User.Role.JOURNALIST:
             raise ValidationError(
                 "Only journalists can be newsletter authors."

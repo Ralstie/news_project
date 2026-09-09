@@ -1,3 +1,10 @@
+"""Views and API endpoints for the NewsHub application.
+
+This module contains authentication, article, newsletter, publisher,
+subscription, dashboard, and REST API views.
+"""
+
+
 from django.contrib import messages
 from django.contrib.auth import login
 from django.db import models
