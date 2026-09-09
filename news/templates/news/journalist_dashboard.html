@@ -1,0 +1,236 @@
+{% extends "news/base.html" %}
+
+{% block title %}
+    Journalist Dashboard - NewsHub
+{% endblock %}
+
+{% block content %}
+
+<div class="container">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <div>
+            <h1>Journalist Dashboard</h1>
+            <p class="text-muted">
+                Welcome, {{ user.username }}.
+            </p>
+        </div>
+
+        <a
+            href="{% url 'article_create' %}"
+            class="btn btn-primary"
+        >
+            Create Article
+        </a>
+
+        <a
+            href="{% url 'newsletter_create' %}"
+            class="btn btn-secondary"
+        >
+            Create Newsletter
+        </a>
+    
+    </div>
+</div>
+
+    <div class="card shadow-sm mb-4">
+
+        <div class="card-header">
+            <h2 class="h5 mb-0">
+                My Articles
+            </h2>
+        </div>
+
+        <div class="card-body">
+
+            {% if articles %}
+
+                <div class="table-responsive">
+
+                    <table class="table table-hover align-middle">
+
+                        <thead>
+                            <tr>
+                                <th>Title</th>
+                                <th>Publisher</th>
+                                <th>Status</th>
+                                <th>Created</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+
+                            {% for article in articles %}
+
+                                <tr>
+
+                                    <td>
+                                        <strong>
+                                            {{ article.title }}
+                                        </strong>
+                                    </td>
+
+                                    <td>
+                                        {% if article.publisher %}
+                                            {{ article.publisher.name }}
+                                        {% else %}
+                                            No publisher
+                                        {% endif %}
+                                    </td>
+
+                                    <td>
+
+                                        {% if article.approved %}
+
+                                            <span class="badge bg-success">
+                                                Approved
+                                            </span>
+
+                                        {% else %}
+
+                                            <span class="badge bg-warning text-dark">
+                                                Pending Approval
+                                            </span>
+
+                                        {% endif %}
+
+                                    </td>
+
+                                    <td>
+                                        {{ article.created_at|date:"F j, Y" }}
+                                    </td>
+
+                                    <td>
+
+                                        <a
+                                            href="{% url 'article_detail' article.id %}"
+                                            class="btn btn-sm btn-outline-primary"
+                                        >
+                                            View
+                                        </a>
+
+                                        {% if not article.approved %}
+
+                                            <a
+                                                href="{% url 'article_edit' article.id %}"
+                                                class="btn btn-sm btn-outline-secondary"
+                                            >
+                                                Edit
+                                            </a>
+
+                                            <a
+                                                href="{% url 'article_delete' article.id %}"
+                                                class="btn btn-sm btn-outline-danger"
+                                            >
+                                                Delete
+                                            </a>
+
+                                        {% endif %}
+
+                                    </td>
+
+                                </tr>
+
+                            {% endfor %}
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            {% else %}
+
+                <p class="text-muted mb-0">
+                    You have not created any articles yet.
+                </p>
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+
+    <div class="card shadow-sm">
+
+        <div class="card-header">
+            <h2 class="h5 mb-0">
+                My Newsletters
+            </h2>
+        </div>
+
+        <div class="card-body">
+
+            {% if newsletters %}
+
+                <div class="list-group">
+
+                    {% for newsletter in newsletters %}
+
+                        <div class="list-group-item">
+
+                            <div class="d-flex justify-content-between align-items-start"></div>
+
+                        </div>
+
+                            <h3 class="h6">
+                                {{ newsletter.title }}
+                            </h3>
+
+                            <p class="mb-1">
+                                {{ newsletter.description }}
+                            </p>
+
+                            <small class="text-muted">
+                                Created
+                                {{ newsletter.created_at|date:"F j, Y" }}
+                            </small>
+
+                            <div class="mt-2">
+
+                                <a
+                                    href="{% url 'newsletter_detail' newsletter.id %}"
+                                    class="btn btn-sm btn-outline-primary"
+                                >
+                                    View
+                                </a>
+                            <div>
+                                
+                                <a
+                                    href="{% url 'newsletter_edit' newsletter.id %}"
+                                    class="btn btn-sm btn-outline-secondary"
+                                >
+                                    Edit
+                                </a>
+
+                                <a
+                                    href="{% url 'newsletter_delete' newsletter.id %}"
+                                    class="btn btn-sm btn-outline-danger"
+                                >
+                                    Delete
+                                </a>
+
+                        </div>
+
+                    {% endfor %}
+
+                </div>
+
+            {% else %}
+
+                <p class="text-muted mb-0">
+                    You have not created any newsletters yet.
+                </p>
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}
