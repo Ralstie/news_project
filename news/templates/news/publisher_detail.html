@@ -1,0 +1,32 @@
+{% extends "news/base.html" %}
+
+{% block title %}{{ publisher.name }} - NewsHub{% endblock %}
+
+{% block content %}
+<h1>{{ publisher.name }}</h1>
+
+{% if publisher.website %}
+    <p>
+        Website:
+        <a href="{{ publisher.website }}" target="_blank" rel="noopener">
+            {{ publisher.website }}
+        </a>
+    </p>
+{% endif %}
+
+<p>{{ publisher.description }}</p>
+
+<h2 class="mt-4">Articles</h2>
+
+{% for article in articles %}
+    <article class="card mb-3">
+        <div class="card-body">
+            <h3 class="h5">{{ article.title }}</h3>
+            <p>By {{ article.author.username }}</p>
+            <a href="{% url 'article_detail' article.id %}">Read article</a>
+        </div>
+    </article>
+{% empty %}
+    <p>No approved articles are available from this publisher.</p>
+{% endfor %}
+{% endblock %}
