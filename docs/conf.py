@@ -5,13 +5,19 @@ import sys
 
 sys.path.insert(0, os.path.abspath(".."))
 
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "news_project.settings")
+
+import django
+
+django.setup()
+
 project = "NewsHub"
 copyright = "2026, Ralston Lamond"
 author = "Ralston Lamond"
 
 extensions = [
-    "sphinx.ext.autodoc",
-    "sphinx.ext.napoleon",
+"sphinx.ext.autodoc",
+"sphinx.ext.napoleon",
 ]
 
 templates_path = ["_templates"]
