@@ -20,52 +20,6 @@
 
         <div class="card-header">
             <h2 class="h5 mb-0">
-                My Publishers
-            </h2>
-        </div>
-
-        <div class="card-body">
-
-            {% if publishers %}
-
-                <div class="list-group">
-
-                    {% for publisher in publishers %}
-
-                        <div class="list-group-item">
-
-                            <h3 class="h6 mb-1">
-                                {{ publisher.name }}
-                            </h3>
-
-                            {% if publisher.description %}
-                                <p class="text-muted mb-0">
-                                    {{ publisher.description }}
-                                </p>
-                            {% endif %}
-
-                        </div>
-
-                    {% endfor %}
-
-                </div>
-
-            {% else %}
-
-                <p class="text-muted mb-0">
-                    You are not assigned to any publishers yet.
-                </p>
-
-            {% endif %}
-
-        </div>
-
-    </div>
-    
-    <div class="card shadow-sm mb-4">
-
-        <div class="card-header">
-            <h2 class="h5 mb-0">
                 Publisher Articles
             </h2>
         </div>

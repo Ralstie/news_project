@@ -8,6 +8,7 @@ subscription, dashboard, and REST API views.
 from django.contrib import messages
 from django.contrib.auth import login
 from django.db import models
+from django.db.models import Q
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import PermissionDenied
 from django.core.mail import send_mail
@@ -89,12 +90,25 @@ def article_list(request):
 
 
 def article_detail(request, article_id):
-    """Display one approved article."""
-    article = get_object_or_404(
-        Article.objects.select_related("author", "publisher"),
-        id=article_id,
-        approved=True,
+    """Display an approved article or a pending article owned by its author."""
+    articles = Article.objects.select_related(
+        "author",
+        "publisher",
     )
+
+    if request.user.is_authenticated:
+        article = get_object_or_404(
+            articles.filter(
+                Q(approved=True) | Q(author=request.user)
+            ),
+            id=article_id,
+        )
+    else:
+        article = get_object_or_404(
+            articles,
+            id=article_id,
+            approved=True,
+        )
 
     return render(
         request,
@@ -329,13 +343,22 @@ def article_create(request):
         if form.is_valid():
             article = form.save(commit=False)
             article.author = request.user
-            article.approved = False
+
+            # Independent journalists can publish immediately.
+            # Articles assigned to a publisher require approval.
+            article.approved = article.publisher is None
             article.save()
 
-            messages.success(
-                request,
-                "Article submitted successfully and is waiting for editor approval.",
-            )
+            if article.approved:
+                messages.success(
+                    request,
+                    "Independent article published successfully.",
+                )
+            else:
+                messages.success(
+                    request,
+                    "Article submitted successfully and is waiting for editor approval.",
+                )
 
             return redirect("journalist_dashboard")
     else:
@@ -375,13 +398,22 @@ def article_edit(request, article_id):
 
         if form.is_valid():
             article = form.save(commit=False)
-            article.approved = False
+
+            # Independent articles can remain published.
+            # Publisher articles must return to the approval workflow.
+            article.approved = article.publisher is None
             article.save()
 
-            messages.success(
-                request,
-                "Article updated and returned for approval.",
-            )
+            if article.approved:
+                messages.success(
+                    request,
+                    "Independent article updated and published successfully.",
+                )
+            else:
+                messages.success(
+                    request,
+                    "Article updated and returned for approval.",
+                )
 
             return redirect("journalist_dashboard")
     else:
@@ -915,27 +947,25 @@ class SubscribedArticlesAPI(APIView):
 
 @login_required
 def publisher_dashboard(request):
-    """Display publisher profiles owned by the current publisher account."""
+    """Display articles and newsletters for the current publisher account."""
     if request.user.role != User.Role.PUBLISHER:
         return redirect("home")
 
-    publishers = Publisher.objects.filter(
-        publishers=request.user
-    ).distinct()
-
     articles = Article.objects.filter(
-        publisher__in=publishers
+        publisher__publishers=request.user
+    ).select_related(
+        "author",
+        "publisher",
     ).order_by("-created_at")
 
     newsletters = Newsletter.objects.filter(
-        articles__publisher__in=publishers
+        articles__publisher__publishers=request.user
     ).distinct().order_by("-created_at")
 
     return render(
         request,
         "news/publisher_dashboard.html",
         {
-            "publishers": publishers,
             "articles": articles,
             "newsletters": newsletters,
         },
