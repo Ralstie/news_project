@@ -1,35 +1,44 @@
 # Python
-__pycache__/
+
+**pycache**/
 *.py[cod]
 *.class
 
 # Virtual environments
+
 venv/
 .venv/
 env/
 django_env/
 
 # Django
+
 db.sqlite3
 *.log
 
 # Environment variables
+
 .env
 
 # IDEs
+
 .vscode/
 .idea/
 
 # OS files
+
 .DS_Store
 Thumbs.db
 
 # Static/media generated files
+
 staticfiles/
 media/
 
 # Archives
+
 *.zip
 
-# Documentation build files
-docs/_build/
+# Documentation
+
+# Generated documentation is intentionally committed for Task 5.
