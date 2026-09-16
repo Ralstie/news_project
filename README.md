@@ -548,18 +548,18 @@ The NewsHub web container and MariaDB database container should be shown as runn
 
 To view the web container logs:
 
-```powershell
 docker compose logs web
-```
 
 To view the MariaDB logs:
 
-```powershell
 docker compose logs db
-```
 
-To follow the logs while the containers are running:
+To follow the web container logs continuously while the containers are running:
 
-```powershell
-docker compose
-```
+docker compose logs -f web
+
+To follow the MariaDB logs continuously:
+
+docker compose logs -f db
+
+Press Ctrl + C to stop following the logs.
