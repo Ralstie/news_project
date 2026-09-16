@@ -128,3 +128,23 @@ LOGIN_REDIRECT_URL = "/"
 LOGOUT_REDIRECT_URL = "/"
 LOGIN_URL = "/login/"
 
+# ---------------------------------------------------------------------------
+# Email configuration
+# ---------------------------------------------------------------------------
+# Development email backend.
+# Emails are printed to the console instead of being sent.
+EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+
+# ---------------------------------------------------------------------------
+# LIVE SMTP CONFIGURATION
+# ---------------------------------------------------------------------------
+# Uncomment and update these settings when deploying NewsHub to a live
+# environment with a real SMTP email provider.
+#
+# EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+# EMAIL_HOST = "smtp.example.com"
+# EMAIL_PORT = 587
+# EMAIL_USE_TLS = True
+# EMAIL_HOST_USER = "your-email@example.com"
+# EMAIL_HOST_PASSWORD = "your-email-password"
+# DEFAULT_FROM_EMAIL = "your-email@example.com"
