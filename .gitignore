@@ -41,7 +41,4 @@ media/
 
 # Documentation
 
-# Generated documentation is intentionally committed for Task 5.
-
-# Generated Sphinx documentation
-/docs/_build/
+# Generated Sphinx documentation is committed for Task 5.
